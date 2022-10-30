@@ -1,9 +1,7 @@
-const express = require('express');
+const dotenv = require('dotenv');
+const app = require('./app');
 
-const app = express();
+dotenv.config();
+const PORT = process.env.PORT || 8000;
 
-app.get('/api', (req, res) => {
-  res.end("Hello, I'm a server!");
-});
-
-app.listen(8000, () => console.log('Sever running on port 8000.'));
+app.listen(PORT, () => console.log(`Sever running on port ${PORT}.`));
