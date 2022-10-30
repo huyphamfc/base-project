@@ -14,3 +14,14 @@ exports.getAllUsers = catchError(async (req, res) => {
     users,
   });
 });
+
+exports.getUserById = catchError(async (req, res) => {
+  const user = await UserModel.findById(req.params.id);
+
+  if (!user) throw new AppError(404, 'Data not found.');
+
+  res.status(200).json({
+    status: 'success',
+    user,
+  });
+});
