@@ -1,3 +1,5 @@
+const AppError = require('../utils/AppError');
+
 const sendErrDev = (err, res) => {
   console.error(err);
 
@@ -15,6 +17,14 @@ const sendErrProd = (err, res) => {
   });
 };
 
+const handleValidationError = (err) => {
+  const message = Object.values(err.errors)
+    .map((subErr) => subErr.message)
+    .join(' ');
+
+  return new AppError(400, message);
+};
+
 module.exports = (err, req, res, next) => {
   let processedErr = Object.assign(err);
   processedErr.statusCode ||= 500;
@@ -28,6 +38,10 @@ module.exports = (err, req, res, next) => {
       sendErrDev(processedErr, res);
       break;
     case 'production':
+      if (processedErr.name === 'ValidationError') {
+        processedErr = handleValidationError(processedErr);
+      }
+
       sendErrProd(processedErr, res);
       break;
     default:
