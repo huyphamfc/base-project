@@ -7,6 +7,7 @@ const limiter = require('express-rate-limit');
 
 const AppError = require('./utils/AppError');
 const handleGlobalError = require('./controllers/errorController');
+const userRouter = require('./routers/userRouter');
 
 // load environment variables
 dotenv.config();
@@ -35,6 +36,9 @@ app.use(
 
 // limit request body size
 app.use(express.json({ limit: '10kb' }));
+
+// routers
+app.use('/api/users', userRouter);
 
 // handle the Unhandled Routes
 app.all('*', (req, res, next) => {
