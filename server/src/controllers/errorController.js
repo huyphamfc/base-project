@@ -8,6 +8,13 @@ const sendErrDev = (err, res) => {
   });
 };
 
+const sendErrProd = (err, res) => {
+  res.status(err.statusCode).json({
+    status: err.status,
+    message: err.message,
+  });
+};
+
 module.exports = (err, req, res, next) => {
   let processedErr = Object.assign(err);
   processedErr.statusCode ||= 500;
@@ -19,6 +26,9 @@ module.exports = (err, req, res, next) => {
   switch (environment) {
     case 'development':
       sendErrDev(processedErr, res);
+      break;
+    case 'production':
+      sendErrProd(processedErr, res);
       break;
     default:
   }
