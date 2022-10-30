@@ -5,6 +5,9 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const limiter = require('express-rate-limit');
 
+const AppError = require('./utils/AppError');
+const handleGlobalError = require('./controllers/errorController');
+
 // load environment variables
 dotenv.config();
 
@@ -32,5 +35,13 @@ app.use(
 
 // limit request body size
 app.use(express.json({ limit: '10kb' }));
+
+// handle the Unhandled Routes
+app.all('*', (req, res, next) => {
+  next(new AppError(404, `Cannot find ${req.originalUrl} on the server.`));
+});
+
+// handle the Global Error
+app.use(handleGlobalError);
 
 module.exports = app;
