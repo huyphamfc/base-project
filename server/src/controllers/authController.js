@@ -87,6 +87,12 @@ exports.protectRoute = catchError(async (req, res, next) => {
   next();
 });
 
+// prettier-ignore
+exports.permitWithRoles = (...roles) => (req, res, next) => {
+    if (roles.includes(req.currentUser.role)) return next();
+    throw new AppError(403, 'Permission required.');
+  };
+
 exports.updatePassword = catchError(async (req, res) => {
   const user = req.currentUser;
   const { password, passwordConfirmation } = req.body;

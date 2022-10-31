@@ -13,10 +13,18 @@ userRouter
 
 userRouter
   .route('/')
-  .get(authController.protectRoute, userController.getAllUsers);
+  .get(
+    authController.protectRoute,
+    authController.permitWithRoles('admin'),
+    userController.getAllUsers,
+  );
 
 userRouter
   .route('/:id')
-  .get(authController.protectRoute, userController.getUserById);
+  .get(
+    authController.protectRoute,
+    authController.permitWithRoles('admin'),
+    userController.getUserById,
+  );
 
 module.exports = userRouter;
