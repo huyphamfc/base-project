@@ -25,3 +25,14 @@ exports.getUserById = catchError(async (req, res) => {
     user,
   });
 });
+
+exports.deleteUserById = catchError(async (req, res) => {
+  const user = await UserModel.findByIdAndDelete(req.params.id);
+
+  if (!user) throw new AppError(404, 'Data not found.');
+
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+});

@@ -25,6 +25,11 @@ userRouter
     authController.protectRoute,
     authController.permitWithRoles('admin'),
     userController.getUserById,
+  )
+  .delete(
+    authController.protectRoute,
+    authController.permitWithRoles('admin'),
+    userController.deleteUserById,
   );
 
 module.exports = userRouter;
