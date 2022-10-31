@@ -35,6 +35,8 @@ const handleCastError = (err) => {
   return new AppError(400, message);
 };
 
+const handleJWTError = () => new AppError(401, 'Invalid Signature.');
+
 module.exports = (err, req, res, next) => {
   let processedErr = Object.assign(err);
   processedErr.statusCode ||= 500;
@@ -51,9 +53,15 @@ module.exports = (err, req, res, next) => {
       if (processedErr.name === 'ValidationError') {
         processedErr = handleValidationError(processedErr);
       }
+
       if (processedErr.name === 'CastError') {
         processedErr = handleCastError(processedErr);
       }
+
+      if (processedErr.name === 'JsonWebTokenError') {
+        processedErr = handleJWTError();
+      }
+
       if (processedErr.code === 11000) {
         processedErr = handleDuplicatedFieldError(processedErr);
       }
