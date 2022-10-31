@@ -35,7 +35,11 @@ const handleCastError = (err) => {
   return new AppError(400, message);
 };
 
-const handleJWTError = () => new AppError(401, 'Invalid Signature.');
+const handleJWTError = () =>
+  new AppError(401, 'Invalid Signature. Please log in again!');
+
+const handleTokenExpiredError = () =>
+  new AppError(401, 'Expired Permission. Please log in again!');
 
 module.exports = (err, req, res, next) => {
   let processedErr = Object.assign(err);
@@ -60,6 +64,10 @@ module.exports = (err, req, res, next) => {
 
       if (processedErr.name === 'JsonWebTokenError') {
         processedErr = handleJWTError();
+      }
+
+      if (processedErr.name === 'TokenExpiredError') {
+        processedErr = handleTokenExpiredError();
       }
 
       if (processedErr.code === 11000) {
