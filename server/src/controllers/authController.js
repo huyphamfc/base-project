@@ -83,5 +83,23 @@ exports.protectRoute = catchError(async (req, res, next) => {
     throw new AppError(401, 'The password has changed. Please log in again!');
   }
 
+  req.currentUser = user;
   next();
+});
+
+exports.updatePassword = catchError(async (req, res) => {
+  const user = req.currentUser;
+  const { password, passwordConfirmation } = req.body;
+
+  user.password = password;
+  user.passwordConfirmation = passwordConfirmation;
+
+  await user.save();
+
+  const token = createJWTToken(user._id);
+
+  res.status(201).json({
+    status: 'success',
+    token,
+  });
 });
