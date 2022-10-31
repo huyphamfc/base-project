@@ -27,8 +27,12 @@ const handleValidationError = (err) => {
 
 const handleDuplicatedFieldError = (err) => {
   const value = Object.values(err.keyValue);
-
   return new AppError(400, `${value} already exists.`);
+};
+
+const handleCastError = (err) => {
+  const message = `${err.value} is invalid.`;
+  return new AppError(400, message);
 };
 
 module.exports = (err, req, res, next) => {
@@ -46,6 +50,9 @@ module.exports = (err, req, res, next) => {
     case 'production':
       if (processedErr.name === 'ValidationError') {
         processedErr = handleValidationError(processedErr);
+      }
+      if (processedErr.name === 'CastError') {
+        processedErr = handleCastError(processedErr);
       }
       if (processedErr.code === 11000) {
         processedErr = handleDuplicatedFieldError(processedErr);
