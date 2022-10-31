@@ -57,3 +57,31 @@ exports.login = catchError(async (req, res) => {
     token,
   });
 });
+
+exports.protectRoute = catchError(async (req, res, next) => {
+  let token;
+  const author = req.headers?.authorization;
+
+  // get token
+  if (author && author.startsWith('Bearer')) {
+    token = author.split(' ')[1];
+  }
+  if (!token) throw new AppError(401, 'Please log in to access.');
+
+  // verify token
+  const decodedToken = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
+
+  // is the user still exist?
+  const user = await UserModel.findById(decodedToken.id);
+  if (!user) {
+    throw new AppError(401, 'The user no longer exists. Please log in again!');
+  }
+
+  // is password change?
+  const isPasswordChange = user.isPasswordChange(decodedToken.iat);
+  if (isPasswordChange) {
+    throw new AppError(401, 'The password has changed. Please log in again!');
+  }
+
+  next();
+});

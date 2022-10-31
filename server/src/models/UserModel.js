@@ -52,6 +52,10 @@ userSchema.method(
     await bcrypt.compare(inputPassword, databasePassword),
 );
 
+userSchema.method('isPasswordChange', function (decodedTimestamp) {
+  return this.passwordUpdateAt.getTime() > decodedTimestamp * 1000;
+});
+
 const UserModel = mongoose.model('User', userSchema);
 
 module.exports = UserModel;

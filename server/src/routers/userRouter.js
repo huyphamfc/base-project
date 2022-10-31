@@ -8,8 +8,12 @@ const userRouter = express.Router();
 userRouter.route('/signup').post(authController.signup);
 userRouter.route('/login').post(authController.login);
 
-userRouter.route('/').get(userController.getAllUsers);
+userRouter
+  .route('/')
+  .get(authController.protectRoute, userController.getAllUsers);
 
-userRouter.route('/:id').get(userController.getUserById);
+userRouter
+  .route('/:id')
+  .get(authController.protectRoute, userController.getUserById);
 
 module.exports = userRouter;
