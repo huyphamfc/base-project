@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
 
@@ -6,7 +7,7 @@ const AppError = require('../utils/AppError');
 const catchError = require('../utils/catchError');
 
 // prettier-ignore
-const createJWTToken = (id) => jwt.sign(
+const signJWT = (id) => jwt.sign(
   { id },
   process.env.JWT_PRIVATE_KEY,
   { expiresIn: process.env.JWT_EXPIRATION },
@@ -22,7 +23,7 @@ exports.signup = catchError(async (req, res) => {
     passwordConfirmation,
   });
 
-  const token = createJWTToken(newUser._id);
+  const token = signJWT(newUser._id);
 
   res.status(201).json({
     status: 'success',
@@ -50,7 +51,7 @@ exports.login = catchError(async (req, res) => {
     throw new AppError(401, 'Your email or password is incorrect.');
   }
 
-  const token = createJWTToken(user._id);
+  const token = signJWT(user._id);
 
   res.status(200).json({
     status: 'success',
@@ -89,9 +90,9 @@ exports.protectRoute = catchError(async (req, res, next) => {
 
 // prettier-ignore
 exports.permitWithRoles = (...roles) => (req, res, next) => {
-    if (roles.includes(req.currentUser.role)) return next();
-    throw new AppError(403, 'Permission required.');
-  };
+  if (roles.includes(req.currentUser.role)) return next();
+  throw new AppError(403, 'Permission required.');
+};
 
 exports.updatePassword = catchError(async (req, res) => {
   const user = req.currentUser;
@@ -102,7 +103,7 @@ exports.updatePassword = catchError(async (req, res) => {
 
   await user.save();
 
-  const token = createJWTToken(user._id);
+  const token = signJWT(user._id);
 
   res.status(201).json({
     status: 'success',
