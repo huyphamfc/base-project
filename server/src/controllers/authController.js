@@ -13,6 +13,16 @@ const signJWT = (id) => jwt.sign(
   { expiresIn: process.env.JWT_EXPIRATION },
 );
 
+const sendCookie = (req, res, token) => {
+  res.cookie('jwt', token, {
+    expires: new Date(
+      Date.now() + process.env.COOKIE_EXPIRATION * 24 * 60 * 60 * 1000,
+    ),
+    httpOnly: true,
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+  });
+};
+
 exports.signup = catchError(async (req, res) => {
   const { name, email, password, passwordConfirmation } = req.body;
 
@@ -24,6 +34,8 @@ exports.signup = catchError(async (req, res) => {
   });
 
   const token = signJWT(newUser._id);
+
+  sendCookie(req, res, token);
 
   res.status(201).json({
     status: 'success',
@@ -52,6 +64,8 @@ exports.login = catchError(async (req, res) => {
   }
 
   const token = signJWT(user._id);
+
+  sendCookie(req, res, token);
 
   res.status(200).json({
     status: 'success',
@@ -104,6 +118,8 @@ exports.updatePassword = catchError(async (req, res) => {
   await user.save();
 
   const token = signJWT(user._id);
+
+  sendCookie(req, res, token);
 
   res.status(201).json({
     status: 'success',
