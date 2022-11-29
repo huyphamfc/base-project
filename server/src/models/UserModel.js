@@ -52,10 +52,8 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-userSchema.method(
-  'verifyPassword',
-  async (inputPassword, databasePassword) =>
-    await bcrypt.compare(inputPassword, databasePassword),
+userSchema.method('verifyPassword', (inputPassword, databasePassword) =>
+  bcrypt.compare(inputPassword, databasePassword),
 );
 
 userSchema.method('isPasswordChange', function (decodedTimestamp) {
