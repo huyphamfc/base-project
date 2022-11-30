@@ -1,0 +1,57 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: sans-serif;
+  font-size: 1.6rem;
+}
+
+main {
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+
+  padding: 3.2rem 1.6rem;
+}
+
+input {
+  width: 280px;
+  padding: 1.2rem 1.6rem;
+}
+
+button {
+  padding: 1.2rem 2.4rem;
+
+  background-color: #0ca678;
+  color: #fff;
+
+  border: none;
+
+  cursor: pointer;
+}
+
+input,
+button {
+  display: inline-block;
+  font-size: inherit;
+  outline: none;
+}
+
+span {
+  font-style: italic;
+}
