@@ -1,14 +1,14 @@
 import React from 'react';
 
 import GlobalStyles from './GlobalStyles';
-import Login from './Login';
+import Auth from './Auth';
 import GetData from './GetData';
 
 function App() {
   return (
     <GlobalStyles>
       <main>
-        <Login />
+        <Auth />
         <GetData />
       </main>
     </GlobalStyles>

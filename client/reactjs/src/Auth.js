@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-function Login() {
+function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [notification, setNotification] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleLogIn = (e) => {
     e.preventDefault();
 
     if (!email || !password) return;
@@ -22,8 +22,16 @@ function Login() {
       .then((result) => setNotification(result.status));
   };
 
+  const handleLogOut = () => {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/users/logout`, {
+      credentials: 'include',
+    })
+      .then((res) => res.json())
+      .then((result) => console.log(result));
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleLogIn}>
       <input
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -37,8 +45,11 @@ function Login() {
       />
       <span>{notification}</span>
       <button type="submit">Login</button>
+      <button type="button" onClick={handleLogOut}>
+        Logout
+      </button>
     </form>
   );
 }
 
-export default Login;
+export default Auth;
