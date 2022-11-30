@@ -43,9 +43,9 @@ const handleTokenExpiredError = () =>
 
 module.exports = (err, req, res, next) => {
   let processedErr = Object.assign(err);
-  processedErr.statusCode ||= 500;
-  processedErr.status ||= 'error';
-  processedErr.message ||= 'Something went wrong!';
+  processedErr.statusCode = processedErr.statusCode || 500;
+  processedErr.status = processedErr.status || 'error';
+  processedErr.message = processedErr.message || 'Something went wrong!';
 
   const environment = process.env.NODE_ENV;
 
