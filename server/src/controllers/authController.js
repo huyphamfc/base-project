@@ -81,6 +81,9 @@ exports.protectRoute = catchError(async (req, res, next) => {
   if (author && author.startsWith('Bearer')) {
     token = author.split(' ')[1];
   }
+  if (req.cookies?.jwt) {
+    token = req.cookies.jwt;
+  }
   if (!token) throw new AppError(401, 'Please log in to access.');
 
   // verify token

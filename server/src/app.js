@@ -4,6 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const limiter = require('express-rate-limit');
+const cookieParser = require('cookie-parser');
 
 const AppError = require('./utils/AppError');
 const handleGlobalError = require('./controllers/errorController');
@@ -40,6 +41,9 @@ app.use(
 
 // limit request body size
 app.use(express.json({ limit: '10kb' }));
+
+// parse Cookie header
+app.use(cookieParser());
 
 // routers
 app.use('/api/users', userRouter);
