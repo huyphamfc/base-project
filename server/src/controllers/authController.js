@@ -20,6 +20,7 @@ const sendCookie = (req, res, token) => {
     ),
     httpOnly: true,
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+    sameSite: 'none',
   });
 };
 
