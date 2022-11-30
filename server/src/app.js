@@ -16,7 +16,11 @@ dotenv.config();
 const app = express();
 
 // enable CORS
-app.use(cors());
+const corsOptions = {
+  origin: process.env.CLIENT_URL,
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 // set HTTP headers security
 app.use(helmet());
