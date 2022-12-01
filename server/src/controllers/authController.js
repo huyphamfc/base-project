@@ -74,6 +74,20 @@ exports.login = catchError(async (req, res) => {
   });
 });
 
+exports.logout = (req, res) => {
+  res.cookie('jwt', '', {
+    expires: new Date(1),
+    httpOnly: true,
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+    sameSite: 'none',
+  });
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Logged out!',
+  });
+};
+
 exports.protectRoute = catchError(async (req, res, next) => {
   let token;
   const author = req.headers?.authorization;
